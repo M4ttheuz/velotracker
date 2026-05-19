@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Logowanie";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <h2 class="mb-4">Zaloguj się</h2>
+
+        <form asp-action="Login" method="post">
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Hasło</label>
+                <input type="password" name="password" class="form-control" required />
+            </div>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="text-danger mb-3">
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                </div>
+            }
+
+            <button type="submit" class="btn btn-primary w-100">Zaloguj</button>
+        </form>
+    </div>
+</div>

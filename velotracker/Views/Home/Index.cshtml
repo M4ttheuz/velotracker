@@ -1,8 +1,85 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<velotracker.Models.Trail>
+@{
+    ViewData["Title"] = "Strona Główna";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mb-4">
+    <h1 class="display-4">Wgrane Trasy</h1>
+    <p>Oto lista ostatnio wgranych tras.</p>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-controller="Home" asp-action="Index" method="get" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label for="searchString" class="form-label">Tytuł / Opis (lokalizacja)</label>
+                <input type="text" class="form-control" id="searchString" name="searchString" value="@ViewData["SearchString"]" placeholder="Czego szukasz?">
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Dystans (km)</label>
+                <div class="input-group">
+                    <input type="number" step="0.1" class="form-control" name="minDistance" placeholder="Min" value="@ViewData["MinDistance"]">
+                    <span class="input-group-text">-</span>
+                    <input type="number" step="0.1" class="form-control" name="maxDistance" placeholder="Max" value="@ViewData["MaxDistance"]">
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Przewyższenia (m)</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" name="minElevation" placeholder="Min" value="@ViewData["MinElevation"]">
+                    <span class="input-group-text">-</span>
+                    <input type="number" class="form-control" name="maxElevation" placeholder="Max" value="@ViewData["MaxElevation"]">
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <label for="difficulty" class="form-label">Trudność</label>
+                <select id="difficulty" name="difficulty" class="form-select">
+                    <option value="">Wszystkie</option>
+                    @if (ViewData["Difficulty"]?.ToString() == "Easy") { <option value="Easy" selected>Łatwa</option> } else { <option value="Easy">Łatwa</option> }
+                    @if (ViewData["Difficulty"]?.ToString() == "Medium") { <option value="Medium" selected>Średnia</option> } else { <option value="Medium">Średnia</option> }
+                    @if (ViewData["Difficulty"]?.ToString() == "Hard") { <option value="Hard" selected>Trudna</option> } else { <option value="Hard">Trudna</option> }
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100 mb-2">Filtruj</button>
+                <a asp-action="Index" class="btn btn-outline-secondary w-100">Wyczyść</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var trail in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@trail.Title</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Dystans: @trail.DistanceKm.ToString("0.00") km | Przewyższenia: @trail.ElevationGainM m</h6>
+                        <p class="card-text">@trail.Description</p>
+                        <a asp-controller="Trail" asp-action="Details" asp-route-id="@trail.Id" class="btn btn-primary btn-sm">Szczegóły</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Dodano: @trail.CreatedAt.ToString("g")
+                        @if (trail.User != null)
+                        {
+                            <br /><span>Przez: @trail.User.Username</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="col-12 text-center">
+            <p>Brak wgranych tras. Pora dodać pierwszą!</p>
+        </div>
+    }
 </div>
