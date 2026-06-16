@@ -23,8 +23,10 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item"><strong>Dystans:</strong> @Model.DistanceKm.ToString("0.00") km</li>
                 <li class="list-group-item"><strong>Przewyższenia:</strong> @Model.ElevationGainM m</li>
-                <li class="list-group-item"><strong>Trudność:</strong> @Model.Difficulty</li>
-                <li class="list-group-item"><strong>Status:</strong> @Model.VerificationStatus</li>
+                <li class="list-group-item"><strong>Rodzaj trasy:</strong> @Model.TrailType</li>
+                <a asp-controller="Trail" asp-action="Download" asp-route-id="@Model.Id" class="btn btn-primary">
+                    <i class="bi bi-download"></i> Pobierz plik GPX
+                </a>
             </ul>
         </div>
     </div>

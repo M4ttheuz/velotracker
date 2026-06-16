@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using velotracker.Models;
 
@@ -17,22 +19,22 @@ namespace velotracker.Services
 
     public class RouteParsingService
     {
-        public RouteData ParseFile(Stream fileStream, string fileName)
+        public async Task<RouteData> ParseFileAsync(Stream fileStream, string fileName, CancellationToken cancellationToken = default)
         {
             if (fileName.EndsWith(".gpx", StringComparison.OrdinalIgnoreCase))
             {
-                return ParseGpx(fileStream);
+                return await ParseGpxAsync(fileStream, cancellationToken);
             }
             if (fileName.EndsWith(".tcx", StringComparison.OrdinalIgnoreCase))
             {
-                return ParseTcx(fileStream);
+                return await ParseTcxAsync(fileStream, cancellationToken);
             }
             throw new NotSupportedException("Niewspierany format pliku.");
         }
 
-        private RouteData ParseGpx(Stream stream)
+        private async Task<RouteData> ParseGpxAsync(Stream stream, CancellationToken cancellationToken)
         {
-            var doc = XDocument.Load(stream);
+            var doc = await XDocument.LoadAsync(stream, LoadOptions.None, cancellationToken);
             XNamespace ns = doc.Root?.GetDefaultNamespace() ?? "";
 
             var trkpts = doc.Descendants(ns + "trkpt").ToList();
@@ -55,13 +57,12 @@ namespace velotracker.Services
                     points.Add(new PointData { Lat = lat, Lon = lon, Ele = ele, Time = time });
                 }
             }
-
-            return CalculateRouteData(points);
+            return await Task.Run(() => CalculateRouteData(points), cancellationToken);
         }
 
-        private RouteData ParseTcx(Stream stream)
+        private async Task<RouteData> ParseTcxAsync(Stream stream, CancellationToken cancellationToken)
         {
-            var doc = XDocument.Load(stream);
+            var doc = await XDocument.LoadAsync(stream, LoadOptions.None, cancellationToken);
             XNamespace ns = doc.Root?.GetDefaultNamespace() ?? "";
 
             var trackpoints = doc.Descendants(ns + "Trackpoint").ToList();
@@ -89,7 +90,7 @@ namespace velotracker.Services
                 }
             }
 
-            return CalculateRouteData(points);
+            return await Task.Run(() => CalculateRouteData(points), cancellationToken);
         }
 
         private RouteData CalculateRouteData(List<PointData> points)
@@ -143,7 +144,7 @@ namespace velotracker.Services
 
         private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
         {
-            var R = 6371; //promień planety naszej :)
+            var R = 6371; // promień Ziemi
             var dLat = Deg2Rad(lat2 - lat1);
             var dLon = Deg2Rad(lon2 - lon1);
             var a =

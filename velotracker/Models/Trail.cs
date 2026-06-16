@@ -26,7 +26,7 @@ namespace velotracker.Models
         public int ElevationGainM { get; set; }
 
         [Required]
-        public string Difficulty { get; set; } = string.Empty;
+        public string TrailType { get; set; } = string.Empty;
 
         [Required]
         public string VerificationStatus { get; set; } = "pending";

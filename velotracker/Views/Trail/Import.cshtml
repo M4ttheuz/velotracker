@@ -1,35 +1,35 @@
 @{
-    ViewData["Title"] = "Import Route";
+    ViewData["Title"] = "Import trasy";
 }
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <h2 class="text-center">Import Route (GPX/TCX)</h2>
+            <h2 class="text-center">Import trasy (GPX/TCX)</h2>
             <form asp-action="Import" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <div class="form-group mb-3">
-                    <label for="routeFile">Route File</label>
+                    <label for="routeFile">Plik trasy</label>
                     <input type="file" id="routeFile" name="routeFile" class="form-control" accept=".gpx,.tcx" required />
-                    <small class="form-text text-muted">Select a GPX or TCX file to import.</small>
+                    <small class="form-text text-muted">Wybierz plik GPX lub TCX do importu.</small>
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" name="title" class="form-control" required placeholder="My Awesome Ride" />
+                    <label for="title">Tytuł</label>
+                    <input type="text" id="title" name="title" class="form-control" required placeholder="Moja wspaniała trasa" />
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="difficulty">Difficulty</label>
-                    <select id="difficulty" name="difficulty" class="form-control">
-                        <option value="Easy">Easy</option>
-                        <option value="Medium" selected>Medium</option>
-                        <option value="Hard">Hard</option>
+                    <label for="trailType">Rodzaj trasy</label>
+                    <select id="trailType" name="trailType" class="form-control">
+                        <option value="Szosowa">Szosowa</option>
+                        <option value="MTB">MTB</option>
+                        <option value="Gravel">Gravel</option>
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Import Route</button>
+                <button type="submit" class="btn btn-primary w-100">Importuj trasę</button>
             </form>
         </div>
     </div>

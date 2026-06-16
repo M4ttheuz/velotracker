@@ -11,14 +11,14 @@ using velotracker.Data;
 namespace velotracker.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260519174944_InitialCreate")]
+    [Migration("20260616170705_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.17");
 
             modelBuilder.Entity("velotracker.Models.Trail", b =>
                 {
@@ -30,10 +30,6 @@ namespace velotracker.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Difficulty")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<double>("DistanceKm")
@@ -49,6 +45,10 @@ namespace velotracker.Migrations
                         .HasColumnType("REAL");
 
                     b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TrailType")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

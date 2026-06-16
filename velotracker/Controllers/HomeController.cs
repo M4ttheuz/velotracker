@@ -15,7 +15,7 @@ namespace velotracker.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(double? minDistance, double? maxDistance, int? minElevation, int? maxElevation, string? difficulty, string? searchString)
+        public async Task<IActionResult> Index(double? minDistance, double? maxDistance, int? minElevation, int? maxElevation, string? trailType, string? searchString)
         {
             var query = _context.Trails.Include(t => t.User).AsQueryable();
 
@@ -31,8 +31,8 @@ namespace velotracker.Controllers
             if (maxElevation.HasValue)
                 query = query.Where(t => t.ElevationGainM <= maxElevation.Value);
 
-            if (!string.IsNullOrEmpty(difficulty))
-                query = query.Where(t => t.Difficulty == difficulty);
+            if (!string.IsNullOrEmpty(trailType))
+                query = query.Where(t => t.TrailType == trailType);
 
             if (!string.IsNullOrEmpty(searchString))
                 query = query.Where(t => t.Title.Contains(searchString) || (t.Description != null && t.Description.Contains(searchString)));
@@ -43,7 +43,7 @@ namespace velotracker.Controllers
             ViewData["MaxDistance"] = maxDistance;
             ViewData["MinElevation"] = minElevation;
             ViewData["MaxElevation"] = maxElevation;
-            ViewData["Difficulty"] = difficulty;
+            ViewData["TrailType"] = trailType;
             ViewData["SearchString"] = searchString;
 
             return View(trails);

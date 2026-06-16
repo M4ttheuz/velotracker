@@ -39,7 +39,7 @@ namespace velotracker.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     DistanceKm = table.Column<double>(type: "REAL", nullable: false),
                     ElevationGainM = table.Column<int>(type: "INTEGER", nullable: false),
-                    Difficulty = table.Column<string>(type: "TEXT", nullable: false),
+                    TrailType = table.Column<string>(type: "TEXT", nullable: false),
                     VerificationStatus = table.Column<string>(type: "TEXT", nullable: false),
                     StartLatitude = table.Column<double>(type: "REAL", nullable: false),
                     StartLongitude = table.Column<double>(type: "REAL", nullable: false),
