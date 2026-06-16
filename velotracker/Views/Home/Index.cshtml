@@ -10,7 +10,7 @@
 
 <div class="card mb-4">
     <div class="card-body">
-        <form asp-controller="Home" asp-action="Index" method="get" class="row g-3 align-items-end">
+        <form asp-controller="Home" asp-action="Index" method="get" class="row g-3 align-items-end" onsubmit="return validateFilters()">
             <div class="col-md-3">
                 <label for="searchString" class="form-label">Tytuł / Opis (lokalizacja)</label>
                 <input type="text" class="form-control" id="searchString" name="searchString" value="@ViewData["SearchString"]" placeholder="Czego szukasz?">
@@ -125,3 +125,40 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+        function validateFilters() {
+            const minDistInput = document.querySelector('input[name="minDistance"]');
+            const maxDistInput = document.querySelector('input[name="maxDistance"]');
+            const minElevInput = document.querySelector('input[name="minElevation"]');
+            const maxElevInput = document.querySelector('input[name="maxElevation"]');
+
+            [minDistInput, maxDistInput, minElevInput, maxElevInput].forEach(el => el?.classList.remove('is-invalid'));
+
+            let isValid = true;
+
+            if (minDistInput && maxDistInput && minDistInput.value && maxDistInput.value) {
+                if (parseFloat(minDistInput.value) > parseFloat(maxDistInput.value)) {
+                    maxDistInput.classList.add('is-invalid');
+                    minDistInput.classList.add('is-invalid');
+                    isValid = false;
+                }
+            }
+
+            if (minElevInput && maxElevInput && minElevInput.value && maxElevInput.value) {
+                if (parseInt(minElevInput.value) > parseInt(maxElevInput.value)) {
+                    maxElevInput.classList.add('is-invalid');
+                    minElevInput.classList.add('is-invalid');
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) {
+                alert("Wartość 'Min' nie może być większa niż 'Max'!");
+            }
+
+            return isValid;
+        }
+    </script>
+}
